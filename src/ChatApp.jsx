@@ -57,8 +57,6 @@ export const ChatApp = () => {
 
     const token = localStorage.getItem("token");
     if (newMessage.trim() !== "" && matchId) {
-      const userName = JSON.parse(atob(token.split(".")[1])).userName;
-
       fetch("http://localhost:3000/api/mensaje", {
         method: "POST",
         headers: {
@@ -68,13 +66,11 @@ export const ChatApp = () => {
         body: JSON.stringify({
           matchId,
           message: newMessage,
-          senderName: userName,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
-          socket.emit("chat message", data.message);
-          setNewMessage("");
+          setNewMessage(""); // no empujes el mensaje, espera a que socket lo emita
           setIsLoading(false);
         });
     }
