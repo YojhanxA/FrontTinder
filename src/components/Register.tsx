@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 type FormState = {
   ciudad: string;
@@ -18,6 +19,14 @@ type FormState = {
 export const Register = () => {
   const navigate = useNavigate();
 
+  const ciudadesDisponibles = [
+    "Bogotá",
+    "Medellín",
+    "Cali",
+    "Barranquilla",
+    "Cartagena",
+  ];
+  const generosDisponibles = ["Femenino", "Masculino"];
   const [form, setForm] = useState<FormState>({
     ciudad: "",
     nombre: "",
@@ -46,6 +55,27 @@ export const Register = () => {
           genero: [value],
         },
       }));
+    } else if (name === "preferencias.edadMin") {
+      setForm((prev) => ({
+        ...prev,
+        preferencias: {
+          ...prev.preferencias,
+          edad: [Number(value), prev.preferencias.edad[1]],
+        },
+      }));
+    } else if (name === "preferencias.edadMax") {
+      setForm((prev) => ({
+        ...prev,
+        preferencias: {
+          ...prev.preferencias,
+          edad: [prev.preferencias.edad[0], Number(value)],
+        },
+      }));
+    } else if (name === "edad") {
+      setForm((prev) => ({
+        ...prev,
+        edad: value,
+      }));
     } else {
       setForm((prev) => ({
         ...prev,
@@ -60,7 +90,7 @@ export const Register = () => {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:3000/api/login", {
+      const res = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -73,8 +103,8 @@ export const Register = () => {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        alert("Registro exitoso, parcero!");
-        navigate("/users");
+        alert("Registro exitoso, parce!");
+        navigate("/login");
       } else {
         setError(data.message || "Error al registrarse");
       }
@@ -92,6 +122,7 @@ export const Register = () => {
         <h2 className="mb-3 text-center">Regístrate</h2>
 
         <form onSubmit={handleSubmit}>
+          {/* Nombre */}
           <div className="mb-3">
             <label className="form-label">Nombre completo</label>
             <input
@@ -100,24 +131,30 @@ export const Register = () => {
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
-              placeholder="Tu nombre"
               required
             />
           </div>
 
+          {/* Ciudad */}
           <div className="mb-3">
             <label className="form-label">Ciudad</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               name="ciudad"
               value={form.ciudad}
               onChange={handleChange}
-              placeholder="Ciudad"
               required
-            />
+            >
+              <option value="">Seleccione una ciudad</option>
+              {ciudadesDisponibles.map((ciudad) => (
+                <option key={ciudad} value={ciudad}>
+                  {ciudad}
+                </option>
+              ))}
+            </select>
           </div>
 
+          {/* Edad */}
           <div className="mb-3">
             <label className="form-label">Edad</label>
             <input
@@ -126,49 +163,96 @@ export const Register = () => {
               name="edad"
               value={form.edad}
               onChange={handleChange}
-              placeholder="18"
               min={18}
               required
             />
           </div>
 
+          {/* Género */}
           <div className="mb-3">
             <label className="form-label">Género</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               name="genero"
               value={form.genero}
               onChange={handleChange}
-              placeholder="M, F, Otro"
               required
-            />
+            >
+              <option value="">Seleccione su género</option>
+              {generosDisponibles.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
           </div>
 
+          {/* Preferencia de género */}
           <div className="mb-3">
             <label className="form-label">Preferencia de género</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               name="preferencias.genero"
+              value={form.preferencias.genero[0] || ""}
               onChange={handleChange}
-              placeholder="M, F, Otro"
               required
-            />
+            >
+              <option value="">Seleccione una preferencia</option>
+              {generosDisponibles.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
           </div>
 
+          {/* Rango de edad preferido */}
+          <div className="mb-3">
+            <label className="form-label">Rango de edad preferido</label>
+            <div className="d-flex gap-2">
+              <input
+                type="number"
+                className="form-control"
+                name="preferencias.edadMin"
+                value={form.preferencias.edad[0]}
+                onChange={handleChange}
+                placeholder="Edad mínima"
+                min={18}
+                required
+              />
+              <input
+                type="number"
+                className="form-control"
+                name="preferencias.edadMax"
+                value={form.preferencias.edad[1]}
+                onChange={handleChange}
+                placeholder="Edad máxima"
+                max={99}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Ubicación */}
           <div className="mb-3">
             <label className="form-label">Ubicación</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               name="ubicacion"
               value={form.ubicacion}
               onChange={handleChange}
-              placeholder="Tu ubicación actual"
-            />
+              required
+            >
+              <option value="">Seleccione una ubicación</option>
+              {ciudadesDisponibles.map((ciudad) => (
+                <option key={ciudad} value={ciudad}>
+                  {ciudad}
+                </option>
+              ))}
+            </select>
           </div>
 
+          {/* Email */}
           <div className="mb-3">
             <label className="form-label">Correo electrónico</label>
             <input
@@ -177,11 +261,11 @@ export const Register = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="ejemplo@mail.com"
               required
             />
           </div>
 
+          {/* Contraseña */}
           <div className="mb-3">
             <label className="form-label">Contraseña</label>
             <input
@@ -190,11 +274,11 @@ export const Register = () => {
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="••••••••"
               required
             />
           </div>
 
+          {/* Error */}
           {error && <div className="alert alert-danger">{error}</div>}
 
           <button

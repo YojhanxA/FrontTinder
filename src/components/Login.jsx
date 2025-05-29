@@ -25,9 +25,7 @@ export const Login = () => {
       if (data.ok) {
         localStorage.setItem("token", data.token);
         alert("Login exitoso!");
-
-        // Redirigir al chat
-        navigate("/chat");
+        navigate("/users");
       } else {
         setError(data.error.message);
       }
@@ -79,6 +77,16 @@ export const Login = () => {
             {loading ? "Cargando..." : "Ingresar"}
           </button>
         </form>
+
+        <hr />
+
+        <button
+          type="button"
+          className="btn btn-outline-secondary w-100"
+          onClick={() => navigate("/register")}
+        >
+          Registrarse
+        </button>
       </div>
     </div>
   );
