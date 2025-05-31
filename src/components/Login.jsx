@@ -39,8 +39,8 @@ export const Login = () => {
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4 shadow" style={{ width: "400px" }}>
-        <h2 className="mb-3 text-center">Iniciar Sesión</h2>
+      <div className="card p-4 shadow" style={{ maxWidth: "400px", width: "100%" }}>
+        <h2 className="mb-4 text-center fw-bold">Iniciar Sesión</h2>
 
         <form onSubmit={handleLogin}>
           <div className="mb-3">
@@ -55,7 +55,7 @@ export const Login = () => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-4">
             <label className="form-label">Contraseña</label>
             <input
               type="password"
@@ -71,14 +71,14 @@ export const Login = () => {
 
           <button
             type="submit"
-            className="btn btn-primary w-100"
+            className="btn btn-primary w-100 mb-3"
             disabled={loading}
           >
             {loading ? "Cargando..." : "Ingresar"}
           </button>
         </form>
 
-        <hr />
+        <hr className="my-4" />
 
         <button
           type="button"

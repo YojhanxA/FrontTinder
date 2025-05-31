@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { socket } from "./socket";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // Import jwtDecode
 
 export const ChatApp = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -8,12 +9,23 @@ export const ChatApp = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [matchId, setMatchId] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null); // State to store current user's ID
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setCurrentUserId(decodedToken.userId); // Assuming 'userId' is in your token payload
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        // Handle invalid token, e.g., redirect to login
+        navigate("/login");
+        return;
+      }
+
       fetch("http://localhost:3000/api/match", {
         method: "GET",
         headers: {
@@ -28,6 +40,8 @@ export const ChatApp = () => {
             setMessages(data.messages);
           }
         });
+    } else {
+      navigate("/login"); // Redirect if no token
     }
 
     socket.on("connect", () => {
@@ -86,7 +100,7 @@ export const ChatApp = () => {
   return (
     <>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
         <div className="container">
           <span className="navbar-brand fw-bold">💬 Chat</span>
           <div>
@@ -103,41 +117,52 @@ export const ChatApp = () => {
         </div>
       </nav>
 
-      {/* Contenido principal */}
+      {/* Main Content */}
       <div className="container pt-5 mt-5">
         <div className="row justify-content-center">
           <div className="col-lg-6 col-md-8 col-sm-12">
-            <div className="card border-primary shadow-sm mt-4">
-              <div className="card-header bg-primary text-white">
-                <h2 className="text-center">Chat Room</h2>
+            <div className="card shadow mt-4">
+              <div className="card-header">
+                <h2 className="text-center mb-0">Chat Room</h2>
               </div>
               <div
                 className="card-body chat-body"
                 style={{ height: "400px", overflowY: "auto" }}
               >
                 <ul className="list-group list-group-flush">
-                  {messages.map((message, index) => (
-                    <li key={index} className="list-group-item">
-                      <div className="d-flex align-items-start mb-2">
-                        <img
-                          src="https://via.placeholder.com/40"
-                          className="rounded-circle me-2"
-                          alt="Avatar"
-                          width="40"
-                          height="40"
-                        />
-                        <div className="ms-2">
-                          <strong>{message.senderName}</strong>
-                          <span className="text-muted small ms-2">
-                            {message.timestamp
-                              ? new Date(message.timestamp).toLocaleTimeString()
-                              : "Hora desconocida"}
-                          </span>
+                  {messages.map((message, index) => {
+                    const isSent = message.senderId === currentUserId; // Assuming message has senderId
+                    return (
+                      <li key={index} className="list-group-item">
+                        <div className={`chat-bubble-container ${isSent ? "sent" : "received"}`}>
+                          <div className={`chat-bubble-content ${isSent ? "sent" : "received"}`}>
+                            <div className={`chat-bubble-info ${isSent ? "sent" : "received"}`}>
+                              <img
+                                src={
+                                  message.senderGender?.toLowerCase() === "masculino"
+                                    ? "https://randomuser.me/api/portraits/men/75.jpg"
+                                    : "https://randomuser.me/api/portraits/women/75.jpg"
+                                }
+                                className="avatar"
+                                alt="Avatar"
+                              />
+                              <span className="name">
+                                {message.senderName || "Usuario"}
+                              </span>
+                              <span className="timestamp">
+                                {message.timestamp
+                                  ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                  : "Hora desconocida"}
+                              </span>
+                            </div>
+                            <p className={`chat-bubble ${isSent ? "sent" : "received"} mb-0`}>
+                              {message.message}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <p className="mb-0 chat-bubble">{message.message}</p>
-                    </li>
-                  ))}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <div className="card-footer">
