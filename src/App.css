@@ -1,0 +1,370 @@
+/* src/App.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --tinder-red: #ff6a6a;
+  --tinder-green: #2ecc71;
+  --tinder-gradient-start: #ee7752;
+  --tinder-gradient-mid: #e73c7e;
+  --tinder-gradient-end: #23a6d5;
+  --tinder-dark-gradient-start: #e94e77;
+  --tinder-dark-gradient-end: #f4806a;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--tinder-gradient-start), var(--tinder-gradient-mid), var(--tinder-gradient-end));
+  background-size: 400% 400%;
+  animation: backgroundGradient 15s ease infinite;
+  min-height: 100vh;
+  color: #333;
+}
+
+@keyframes backgroundGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- General Card Styling --- */
+.card {
+  border-radius: 15px;
+  border: none;
+  overflow: hidden; /* Ensures rounded corners apply to children */
+}
+
+.card-header {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background: linear-gradient(90deg, var(--tinder-red), var(--tinder-dark-gradient-end));
+  color: white;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+}
+
+.card-footer {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background-color: #f8f9fa;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+/* --- Buttons --- */
+.btn-primary {
+  background-color: var(--tinder-red);
+  border-color: var(--tinder-red);
+  font-weight: 600;
+  border-radius: 50px; /* Pill shape for buttons */
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #ff4d4d;
+  border-color: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-danger {
+  color: var(--tinder-red);
+  border-color: var(--tinder-red);
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--tinder-red);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-success {
+  color: var(--tinder-green);
+  border-color: var(--tinder-green);
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--tinder-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- User Card specific styles (UserList) --- */
+.user-card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  min-height: 500px; /* Ensure a consistent height */
+  display: flex;
+  flex-direction: column;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+}
+
+.user-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card-img-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.card-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.card-text {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Swipe buttons */
+.swipe-buttons {
+  margin-top: 2rem;
+  gap: 2rem;
+}
+
+.swipe-button {
+  background-color: white;
+  border: 2px solid;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.swipe-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.swipe-button.dislike {
+  border-color: var(--tinder-red);
+  color: var(--tinder-red);
+}
+
+.swipe-button.dislike:hover {
+  background-color: var(--tinder-red);
+  color: white;
+}
+
+.swipe-button.like {
+  border-color: var(--tinder-green);
+  color: var(--tinder-green);
+}
+
+.swipe-button.like:hover {
+  background-color: var(--tinder-green);
+  color: white;
+}
+
+/* Chat styles */
+.chat-body {
+  background-color: #f0f2f5; /* Light grey background for chat area */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between messages */
+}
+
+.list-group-item {
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chat-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 1.2rem;
+  max-width: 75%;
+  position: relative;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.chat-bubble.sent {
+  background-color: var(--tinder-red);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 0.3rem;
+  margin-left: auto; /* Push to the right */
+}
+
+.chat-bubble.received {
+  background-color: #e4e6eb; /* Light grey for received messages */
+  color: #333;
+  align-self: flex-start;
+  border-bottom-left-radius: 0.3rem;
+  margin-right: auto; /* Push to the left */
+}
+
+.chat-bubble-container {
+  display: flex;
+  width: 100%;
+}
+
+.chat-bubble-container.sent {
+  justify-content: flex-end;
+}
+
+.chat-bubble-container.received {
+  justify-content: flex-start;
+}
+
+.chat-bubble-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chat-bubble-content.sent {
+  align-items: flex-end;
+}
+
+.chat-bubble-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.chat-bubble-info.sent {
+  flex-direction: row-reverse; /* For sent messages, time and avatar on right */
+}
+
+.chat-bubble-info .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px; /* Space from name */
+}
+
+.chat-bubble-info.sent .avatar {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+.chat-bubble-info .name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.chat-bubble-info .timestamp {
+  font-size: 0.75rem;
+  color: #999;
+  margin-left: 8px;
+}
+
+.chat-bubble-info.sent .timestamp {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(90deg, var(--tinder-dark-gradient-start), var(--tinder-dark-gradient-end)) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  color: white !important;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.navbar .btn-outline-primary {
+  color: white;
+  border-color: white;
+}
+
+.navbar .btn-outline-primary:hover {
+  background-color: white;
+  color: var(--tinder-dark-gradient-start);
+}
+
+.navbar .btn-outline-danger {
+  color: white;
+  border-color: white;
+}
+
+.navbar .btn-outline-danger:hover {
+  background-color: white;
+  color: var(--tinder-dark-gradient-start);
+}
+
+/* Forms */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+  border-color: var(--tinder-red);
+  box-shadow: 0 0 0 0.25rem rgba(255, 106, 106, 0.25);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.5rem;
+}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar"; // Navbar is not needed for register page
 
 type FormState = {
   ciudad: string;
@@ -44,7 +44,7 @@ export const Register = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
     if (name === "preferencias.genero") {
@@ -84,7 +84,7 @@ export const Register = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -102,7 +102,7 @@ export const Register = () => {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token); // Although you navigate to login, storing token here can be useful for direct access
         alert("Registro exitoso, parce!");
         navigate("/login");
       } else {
@@ -118,8 +118,8 @@ export const Register = () => {
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4 shadow" style={{ width: "400px" }}>
-        <h2 className="mb-3 text-center">Regístrate</h2>
+      <div className="card p-4 shadow" style={{ maxWidth: "400px", width: "100%" }}>
+        <h2 className="mb-3 text-center fw-bold">Regístrate</h2>
 
         <form onSubmit={handleSubmit}>
           {/* Nombre */}
@@ -266,7 +266,7 @@ export const Register = () => {
           </div>
 
           {/* Contraseña */}
-          <div className="mb-3">
+          <div className="mb-4">
             <label className="form-label">Contraseña</label>
             <input
               type="password"
